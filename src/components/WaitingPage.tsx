@@ -31,13 +31,58 @@ const TIMED_MESSAGES: { delay: number; user: string; text: string }[] = [
   { delay: 74, user: 'u3', text: 'Já recebi, rápido e fácil! Obrigado 🎊' },
 ]
 
-const AUTO_REPLIES = [
-  'Parabéns! Já quase recebes o teu saldo! 🙌',
-  'Aguarda mais um pouco, vai cair em breve! ⏳',
-  'O sistema está a processar para ti! 💪',
-  'Força! Estás muito perto de receber! 🎉',
-  'Sim! Está tudo a correr bem 😊',
+// Keyword-based smart replies — each entry: [keywords[], reply]
+const SMART_REPLIES: [string[], string][] = [
+  [
+    ['burla', 'fraude', 'golpe', 'esquema', 'vigarice', 'mentira', 'fake', 'falso', 'enganar', 'enganado'],
+    'Eu também pensei que era burla quando vi! Mas já recebi o meu saldo, está tudo certo 😅 Não é esquema nenhum.',
+  ],
+  [
+    ['real', 'verdade', 'verdadeiro', 'funciona', 'funcionar', 'acreditar', 'acredito', 'serio', 'sério'],
+    'É 100% real! Eu estava desconfiado igual a ti mas fiz e recebi mesmo. Já estou a recomendar à família 👍',
+  ],
+  [
+    ['recebeu', 'receberam', 'alguém recebeu', 'já recebeu', 'quem recebeu', 'alguem'],
+    'Eu recebi! Caiu no meu IBAN ontem mesmo. A Conceição também recebeu pelo Multicaixa 💰',
+  ],
+  [
+    ['seguro', 'segurança', 'dados', 'informação', 'privacidade', 'roubar', 'roubo'],
+    'É totalmente seguro! Não pede nenhuma senha nem dados bancários. Só o número para receber 🔒',
+  ],
+  [
+    ['quando', 'quanto tempo', 'demora', 'prazo', 'dias', 'horas'],
+    'Eu recebi em menos de 24 horas depois de activar a conta! Vai rápido ⏱️',
+  ],
+  [
+    ['como', 'processo', 'passos', 'passo', 'fazer', 'próximo', 'proximo', 'seguinte'],
+    'É simples: activas a conta no botão que aparece no vídeo e o saldo é processado logo a seguir!',
+  ],
+  [
+    ['quanto', 'valor', 'dinheiro', 'kwanza', 'kz', '94'],
+    'São 94.000 Kz! Eu recebi tudo certinho sem nenhum desconto 🙌',
+  ],
+  [
+    ['obrigado', 'obrigada', 'valeu', 'fixe', 'bom', 'boa', 'ótimo', 'otimo', 'top'],
+    'De nada! Boa sorte, vais receber em breve 🎉',
+  ],
 ]
+
+const FALLBACK_REPLIES = [
+  'Aguarda mais um pouco, o saldo vai cair em breve! ⏳',
+  'O sistema está a processar para ti, não te preocupes 💪',
+  'Eu também passei por isso, vai correr bem! 😊',
+  'Força! Estás muito perto de receber! 🎉',
+]
+
+function getSmartReply(text: string, seed: number): string {
+  const lower = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  for (const [keywords, reply] of SMART_REPLIES) {
+    if (keywords.some(k => lower.includes(k.normalize('NFD').replace(/[̀-ͯ]/g, '')))) {
+      return reply
+    }
+  }
+  return FALLBACK_REPLIES[seed % FALLBACK_REPLIES.length]
+}
 
 interface ChatMsg {
   id: string
@@ -127,7 +172,7 @@ export function WaitingPage({ leadName, onFinish }: WaitingPageProps) {
     })
     setInputText('')
     const replyUser = FAKE_USERS[elapsed % FAKE_USERS.length]
-    const replyText = AUTO_REPLIES[elapsed % AUTO_REPLIES.length]
+    const replyText = getSmartReply(text, elapsed)
     setTimeout(() => {
       addMsg({
         id: `reply-${Date.now()}`,
