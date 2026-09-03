@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+/* Prevent iOS auto-zoom on input focus */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
 body {
   font-family: 'Inter', Arial, sans-serif;
   background-color: #F0F2F5;
