@@ -1,5 +1,6 @@
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle2, Shield, Star, Users, ChevronRight, BadgeCheck } from 'lucide-react'
+import { CheckCircle2, Shield, Star, Users, ChevronRight, BadgeCheck, Play, Square } from 'lucide-react'
 
 interface LandingPageProps {
   onStart: () => void
@@ -7,11 +8,27 @@ interface LandingPageProps {
 
 const SOCIAL_PROOF = [
   { photo: '/images/avatars/ana.jpg', name: 'Ana K.', text: 'Recebi os meus Kz virtuais!' },
-  { photo: '/images/avatars/miguel.jpg', name: 'Miguel F.', text: 'Muito fácil e rápido!' },
+  { photo: '/images/avatars/miguel.jpg', name: 'Miguel F.', text: 'Ouve o meu depoimento ▶', audio: '/audio/miguel.mp3' },
   { photo: '/images/avatars/carlos.jpg', name: 'Carlos E.', text: 'Já avaliei as 5 publicações.' },
 ]
 
 export function LandingPage({ onStart }: LandingPageProps) {
+  const [playingIdx, setPlayingIdx] = useState<number | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  const toggleAudio = (idx: number, src: string) => {
+    if (playingIdx === idx) {
+      audioRef.current?.pause()
+      setPlayingIdx(null)
+    } else {
+      if (audioRef.current) audioRef.current.pause()
+      const audio = new Audio(src)
+      audio.onended = () => setPlayingIdx(null)
+      audio.play()
+      audioRef.current = audio
+      setPlayingIdx(idx)
+    }
+  }
   return (
     <div className="min-h-screen bg-[#1877F2] flex flex-col items-center overflow-x-hidden">
 
@@ -140,11 +157,28 @@ export function LandingPage({ onStart }: LandingPageProps) {
                 <p className="text-white font-semibold text-sm leading-none">{p.name}</p>
                 <p className="text-white/70 text-xs mt-0.5">"{p.text}"</p>
               </div>
-              <div className="flex">
-                {[...Array(5)].map((_, j) => (
-                  <Star key={j} size={11} className="text-[#F7B928] fill-[#F7B928]" />
-                ))}
-              </div>
+              {p.audio ? (
+                <button
+                  onClick={() => toggleAudio(i, p.audio!)}
+                  className="flex items-center gap-1 bg-white/20 hover:bg-white/30 active:scale-95 transition-all rounded-full px-3 py-1.5 flex-shrink-0"
+                  aria-label={playingIdx === i ? 'Parar áudio' : 'Ouvir depoimento'}
+                >
+                  {playingIdx === i ? (
+                    <Square size={12} className="text-white fill-white" />
+                  ) : (
+                    <Play size={12} className="text-white fill-white" />
+                  )}
+                  <span className="text-white text-[11px] font-semibold">
+                    {playingIdx === i ? 'Parar' : 'Ouvir'}
+                  </span>
+                </button>
+              ) : (
+                <div className="flex">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} size={11} className="text-[#F7B928] fill-[#F7B928]" />
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </motion.div>
