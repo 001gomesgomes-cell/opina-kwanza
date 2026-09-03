@@ -6,9 +6,9 @@ interface LandingPageProps {
 }
 
 const SOCIAL_PROOF = [
-  { avatar: 'AK', name: 'Ana K.', text: 'Recebi os meus Kz virtuais!', color: '#E41E3F' },
-  { avatar: 'MF', name: 'Miguel F.', text: 'Muito fácil e rápido!', color: '#31A24C' },
-  { avatar: 'CE', name: 'Carlos E.', text: 'Já avaliei as 5 publicações.', color: '#1877F2' },
+  { photo: '/images/avatars/ana.jpg', name: 'Ana K.', text: 'Recebi os meus Kz virtuais!' },
+  { photo: '/images/avatars/miguel.jpg', name: 'Miguel F.', text: 'Muito fácil e rápido!' },
+  { photo: '/images/avatars/carlos.jpg', name: 'Carlos E.', text: 'Já avaliei as 5 publicações.' },
 ]
 
 export function LandingPage({ onStart }: LandingPageProps) {
@@ -131,12 +131,11 @@ export function LandingPage({ onStart }: LandingPageProps) {
         >
           {SOCIAL_PROOF.map((p, i) => (
             <div key={i} className="bg-white/15 rounded-xl px-4 py-3 flex items-center gap-3">
-              <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                style={{ backgroundColor: p.color }}
-              >
-                {p.avatar}
-              </div>
+              <img
+                src={p.photo}
+                alt={p.name}
+                className="w-9 h-9 rounded-full object-cover flex-shrink-0"
+              />
               <div className="flex-1 min-w-0">
                 <p className="text-white font-semibold text-sm leading-none">{p.name}</p>
                 <p className="text-white/70 text-xs mt-0.5">"{p.text}"</p>
