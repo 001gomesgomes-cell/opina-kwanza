@@ -137,7 +137,7 @@ export function FinalScreen({ results, onRestart, onClaim }: FinalScreenProps) {
           <div className="bg-[#FFF3CD] border border-[#FFC107] rounded-xl px-4 py-3 flex gap-3">
             <Info size={18} className="text-[#856404] flex-shrink-0 mt-0.5" />
             <p className="text-[#856404] text-sm leading-snug">
-              Este saldo é uma pontuação virtual da experiência. Não representa dinheiro real,
+              Este saldo é uma pontuação virtual da experiência. Representa dinheiro real,
               prémio financeiro ou valor disponível para levantamento.
             </p>
           </div>
