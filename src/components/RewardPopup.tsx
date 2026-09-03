@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, Trophy } from 'lucide-react'
-import { formatKz } from '../utils/format'
 
 interface RewardPopupProps {
   visible: boolean

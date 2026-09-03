@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { Coins } from 'lucide-react'
 import { Logo } from './Logo'
 import { SoundToggle } from './SoundToggle'
-import { formatKz } from '../utils/format'
 
 interface HeaderProps {
   current: number

@@ -1,24 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const UNLOCK_AFTER = 120
 const ACTIVATION_URL = 'https://www.kintu.org/product/6ed7caf6-33b4-40bc-af60-83b62e6f50ad'
 
 export function VideoPage() {
-  const [secondsWatched, setSecondsWatched] = useState(0)
   const [unlocked, setUnlocked] = useState(false)
+  const countRef = useRef(0)
 
   useEffect(() => {
     if (unlocked) return
     const interval = setInterval(() => {
-      setSecondsWatched(s => {
-        const next = s + 1
-        if (next >= UNLOCK_AFTER) {
-          setUnlocked(true)
-          clearInterval(interval)
-        }
-        return next
-      })
+      countRef.current += 1
+      if (countRef.current >= UNLOCK_AFTER) {
+        setUnlocked(true)
+        clearInterval(interval)
+      }
     }, 1000)
     return () => clearInterval(interval)
   }, [unlocked])
@@ -32,7 +29,6 @@ export function VideoPage() {
         style={{ border: 'none', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
         allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
         allowFullScreen
-        fetchPriority="high"
         title="Vídeo de activação de conta"
       />
 
