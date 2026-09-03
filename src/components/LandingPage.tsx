@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle2, Shield, Star, Users, ChevronRight, BadgeCheck, Play, Square } from 'lucide-react'
+import { CheckCircle2, Shield, Star, Users, ChevronRight, BadgeCheck, Play } from 'lucide-react'
 
 interface LandingPageProps {
   onStart: () => void
@@ -8,7 +8,7 @@ interface LandingPageProps {
 
 const SOCIAL_PROOF = [
   { photo: '/images/avatars/ana.jpg', name: 'Ana K.', text: 'Recebi os meus Kz virtuais!' },
-  { photo: '/images/avatars/miguel.jpg', name: 'Miguel F.', text: 'Ouve o meu depoimento ▶', audio: '/audio/miguel.mp3' },
+  { photo: '/images/avatars/miguel.jpg', name: 'Miguel F.', text: '', audio: '/audio/miguel.mp3' },
   { photo: '/images/avatars/carlos.jpg', name: 'Carlos E.', text: 'Já avaliei as 5 publicações.' },
 ]
 
@@ -147,39 +147,74 @@ export function LandingPage({ onStart }: LandingPageProps) {
           transition={{ delay: 0.5 }}
         >
           {SOCIAL_PROOF.map((p, i) => (
-            <div key={i} className="bg-white/15 rounded-xl px-4 py-3 flex items-center gap-3">
-              <img
-                src={p.photo}
-                alt={p.name}
-                className="w-9 h-9 rounded-full object-cover flex-shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-semibold text-sm leading-none">{p.name}</p>
-                <p className="text-white/70 text-xs mt-0.5">"{p.text}"</p>
-              </div>
-              {p.audio ? (
+            p.audio ? (
+              /* Audio testimonial card — full-width tap target */
+              <div key={i} className="bg-white/20 border border-white/30 rounded-xl p-3 flex flex-col gap-2">
+                <div className="flex items-center gap-3">
+                  <div className="relative flex-shrink-0">
+                    <img src={p.photo} alt={p.name} className="w-10 h-10 rounded-full object-cover" />
+                    {/* Mic badge */}
+                    <span className="absolute -bottom-1 -right-1 bg-[#F7B928] rounded-full w-4 h-4 flex items-center justify-center text-[9px]">🎙</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-bold text-sm leading-none">{p.name}</p>
+                    <p className="text-[#F7B928] text-[10px] font-semibold mt-0.5">🎧 Depoimento em áudio</p>
+                  </div>
+                  <div className="flex">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} size={11} className="text-[#F7B928] fill-[#F7B928]" />
+                    ))}
+                  </div>
+                </div>
                 <button
                   onClick={() => toggleAudio(i, p.audio!)}
-                  className="flex items-center gap-1 bg-white/20 hover:bg-white/30 active:scale-95 transition-all rounded-full px-3 py-1.5 flex-shrink-0"
+                  className={`w-full flex items-center justify-center gap-2 rounded-lg py-2.5 font-bold text-sm active:scale-95 transition-all ${
+                    playingIdx === i
+                      ? 'bg-white/20 text-white'
+                      : 'bg-[#F7B928] text-[#7a5700]'
+                  }`}
                   aria-label={playingIdx === i ? 'Parar áudio' : 'Ouvir depoimento'}
                 >
                   {playingIdx === i ? (
-                    <Square size={12} className="text-white fill-white" />
+                    <>
+                      <motion.span
+                        className="flex gap-0.5 items-end h-4"
+                        initial={false}
+                      >
+                        {[3,5,4,6,3,5].map((h, k) => (
+                          <motion.span
+                            key={k}
+                            className="w-1 bg-white rounded-full"
+                            animate={{ height: [h, h * 2, h] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: k * 0.1 }}
+                            style={{ height: h }}
+                          />
+                        ))}
+                      </motion.span>
+                      A reproduzir… toca para parar
+                    </>
                   ) : (
-                    <Play size={12} className="text-white fill-white" />
+                    <>
+                      <Play size={15} className="fill-current" />
+                      Ouvir depoimento do Miguel
+                    </>
                   )}
-                  <span className="text-white text-[11px] font-semibold">
-                    {playingIdx === i ? 'Parar' : 'Ouvir'}
-                  </span>
                 </button>
-              ) : (
+              </div>
+            ) : (
+              <div key={i} className="bg-white/15 rounded-xl px-4 py-3 flex items-center gap-3">
+                <img src={p.photo} alt={p.name} className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-semibold text-sm leading-none">{p.name}</p>
+                  <p className="text-white/70 text-xs mt-0.5">"{p.text}"</p>
+                </div>
                 <div className="flex">
                   {[...Array(5)].map((_, j) => (
                     <Star key={j} size={11} className="text-[#F7B928] fill-[#F7B928]" />
                   ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )
           ))}
         </motion.div>
 
