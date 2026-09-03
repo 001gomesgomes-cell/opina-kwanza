@@ -168,7 +168,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
             <ChevronRight size={24} />
           </motion.button>
           <p className="text-white/60 text-xs text-center mt-3 leading-snug px-2">
-            Esta é uma experiência gamificada. Os créditos são virtuais e não representam dinheiro real.
+            Esta é uma experiência gamificada. Os créditos são virtuais e representam dinheiro real.
           </p>
         </motion.div>
       </div>
