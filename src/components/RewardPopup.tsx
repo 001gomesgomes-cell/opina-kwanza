@@ -115,7 +115,7 @@ export function RewardPopup({ visible, reward, balance, postIndex, totalPosts, o
                 </button>
 
                 <p className="text-[#65676B] text-[11px] text-center mt-3 leading-snug">
-                  Recompensa virtual desta simulação — não levantável.
+                  As recompensas virtuais deste trabalho de avaliador — São levantáveis.
                 </p>
               </div>
             </div>
